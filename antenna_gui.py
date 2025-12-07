@@ -20,19 +20,19 @@ class AntennaGUI:
         self.rr_entry = tk.Entry(self.root)
         self.rr_entry.pack()
 
-        tk.Label(self.root, text="Loss Resistance RL (Ω):").pack()
+        tk.Label(self.root, text="Loss Resistance Rl (Ω):").pack()
         self.rl_entry = tk.Entry(self.root)
         self.rl_entry.pack()
 
         tk.Label(self.root, text="Select Antenna Type").pack(pady=10)
 
         self.antennas = [
-            "Monopole (Whip)",
+            "Monopole",
             "Dipole",
             "Folded Dipole",
             "Loop",
             "Discone",
-            "Yagi Array",
+            "Yagi",
             "Helical",
             "Parabolic",
             "Horn",
@@ -40,6 +40,7 @@ class AntennaGUI:
             "Microstrip"
         ]
 
+        # * select only => readonly
         self.combo = ttk.Combobox(
             self.root, values=self.antennas, state="readonly")
         self.combo.pack()
@@ -52,21 +53,20 @@ class AntennaGUI:
 
         self.result = tk.Text(self.root, height=10, width=45)
         self.result.pack()
-
         self.plotter = AntennaPlot()
         self.antenna = None
 
         self.root.mainloop()
 
-    def get_antenna_object(self, f, Rr, RL, name):
+    def get_antenna_object(self, f, Rr, Rl, name):
 
         mapping = {
-            "Monopole (Whip)": Monopole,
             "Dipole": Dipole,
+            "Monopole": Monopole,
             "Folded Dipole": FoldedDipole,
             "Loop": Loop,
             "Discone": Discone,
-            "Yagi Array": Yagi,
+            "Yagi": Yagi,
             "Helical": Helical,
             "Parabolic": Parabolic,
             "Horn": Horn,
@@ -74,19 +74,22 @@ class AntennaGUI:
             "Microstrip": Microstrip
         }
 
-        return mapping[name](f, Rr, RL)
+        return mapping[name](f, Rr, Rl)
 
     def calculate(self):
         try:
             f = float(self.freq_entry.get())
             Rr = float(self.rr_entry.get())
-            RL = float(self.rl_entry.get())
-            antenna_name = self.combo.get()
+            Rl = float(self.rl_entry.get())
+        except ValueError:
+            messagebox.showerror(
+                "Input Error", "Please enter valid numeric values")
+            return
 
-            self.antenna = self.get_antenna_object(f, Rr, RL, antenna_name)
-
+        antenna_name = self.combo.get()
+        try:
+            self.antenna = self.get_antenna_object(f, Rr, Rl, antenna_name)
             self.result.delete(1.0, tk.END)
-
             self.result.insert(tk.END, f"Antenna Type: {antenna_name}\n")
             self.result.insert(
                 tk.END, f"Wavelength: {round(self.antenna.wavelength(), 4)} m\n")
@@ -98,12 +101,11 @@ class AntennaGUI:
                 tk.END, f"Directivity: {self.antenna.directivity()}\n")
             self.result.insert(
                 tk.END, f"Efficiency: {round(self.antenna.efficiency()*100, 2)} %\n")
-            self.result.insert(
-                tk.END, f"Beamwidth: {self.antenna.beamwidth()} degrees\n")
-
-        except:
-            messagebox.showerror(
-                "Input Error", "Please enter valid numeric values")
+            # self.result.insert(
+            #     tk.END, f"Beamwidth: {self.antenna.beamwidth()} degrees\n")
+        except Exception as e:
+            messagebox.showerror("Calculation Error",
+                                 f"An error occurred: {e}")
 
     def plot_pattern(self):
 
@@ -112,7 +114,7 @@ class AntennaGUI:
             return
 
         name = type(self.antenna).__name__
-        self.plotter.plot(name)
+        self.plotter.plot(self.antenna)
 
 
 AntennaGUI()
