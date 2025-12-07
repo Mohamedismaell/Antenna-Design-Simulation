@@ -1,4 +1,5 @@
-import antenna_models
+import models.omni_antenna_models as omni
+import models.directive_antennas_model as directive
 
 
 class AntennaInput:
@@ -28,19 +29,19 @@ class AntennaInput:
         choice = input("\nEnter number: ")
 
         antennas = {
-            "1": antenna_models.Monopole,
-            "2": antenna_models.Dipole,
-            "3": antenna_models.FoldedDipole,
-            "4": antenna_models.Loop,
-            "5": antenna_models.Discone,
-            "6": antenna_models.Yagi,
-            "7": antenna_models.Helical,
-            "8": antenna_models.Parabolic,
-            "9": antenna_models.Horn,
-            "10": antenna_models.CellSite,
-            "11": antenna_models.Microstrip
+            "1": omni.Monopole,
+            "2": omni.Dipole,
+            "3": omni.FoldedDipole,
+            "4": omni.Loop,
+            "5": omni.Discone,
+            "6": directive.Yagi,
+            "7": directive.Helical,
+            "8": directive.Parabolic,
+            "9": directive.Horn,
+            "10": directive.CellSite,
+            "11": directive.Microstrip
         }
 
         #! safe Deafult calue is "Dipole" D=1.64
-        antenna_class = antennas.get(choice, antenna_models.Dipole)
+        antenna_class = antennas.get(choice, omni.Dipole)
         return antenna_class(f, Rr, RL)

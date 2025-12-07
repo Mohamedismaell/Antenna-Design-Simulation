@@ -20,7 +20,7 @@ class Antenna(ABC):
         return 10 * math.log10(self.gain_linear())
 
     def gain_linear(self):
-        return self.directivity * self.efficiency
+        return self.directivity() * self.efficiency()
 
     @abstractmethod
     def length(self):
@@ -30,6 +30,6 @@ class Antenna(ABC):
     def directivity(self):
         pass
 
-    @abstractmethod
-    def beamwidth(self):
-        pass
+    # @abstractmethod
+    # def beamwidth(self):
+    #     pass

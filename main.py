@@ -11,7 +11,14 @@ print("Antenna Length:", round(antenna.length(), 4), "m")
 print("Gain:", round(antenna.gain_db(), 2), "dB")
 print("Directivity:", antenna.directivity())
 print("Efficiency:", round(antenna.efficiency()*100, 2), "%")
-print("Beamwidth:", antenna.beamwidth(), "degrees")
+
+#! Not working
+# print("Beamwidth:", antenna.beamwidth(), "degrees")
 
 plotter = AntennaPlot()
 plotter.plot(type(antenna).__name__)
+
+# Enter frequency (Hz): 100000000   # 100 MHz
+# Enter radiation resistance Rr: 50
+# Enter loss resistance RL: 5
+# Enter number: 2   # Dipole

@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from antenna_models import *
+from models.directive_antennas_model import *
+from models.omni_antenna_models import *
 from antenna_plot import AntennaPlot
 
 
@@ -96,7 +97,7 @@ class AntennaGUI:
             self.result.insert(
                 tk.END, f"Directivity: {self.antenna.directivity()}\n")
             self.result.insert(
-                tk.END, f"Efficiency: {round(self.antenna.efficiency()*100,2)} %\n")
+                tk.END, f"Efficiency: {round(self.antenna.efficiency()*100, 2)} %\n")
             self.result.insert(
                 tk.END, f"Beamwidth: {self.antenna.beamwidth()} degrees\n")
 
@@ -114,5 +115,4 @@ class AntennaGUI:
         self.plotter.plot(name)
 
 
-# Run GUI
 AntennaGUI()
